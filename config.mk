@@ -60,7 +60,7 @@ PLATFORM_LDFLAGS =
 
 #########################################################################
 
-HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer \
+HOSTCFLAGS	= -Wall -Wstrict-prototypes -O0 -fomit-frame-pointer \
 		  $(HOSTCPPFLAGS)
 HOSTSTRIP	= strip
 
@@ -190,7 +190,7 @@ endif
 ARFLAGS = $(error update your Makefile to use cmd_link_o_target and not AR)
 RELFLAGS= $(PLATFORM_RELFLAGS)
 DBGFLAGS= -g -DDEBUG
-OPTFLAGS= -Os #-fomit-frame-pointer
+OPTFLAGS= -O0 #-fomit-frame-pointer
 
 OBJCFLAGS += --gap-fill=0xff
 
