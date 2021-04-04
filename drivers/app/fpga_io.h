@@ -1,0 +1,52 @@
+#ifndef __FPGA_IO_H__
+#define __FPGA_IO_H__
+
+#include <common.h>
+#include <command.h>
+
+#define mdelay(n)       udelay((n)*1000)
+
+/* FPGA TEXTLCD ADDRESS */
+#define ADDR_OF_LCD         0x05000010
+/* FPGA LED ADDRESS */
+#define ADDR_OF_LED         0x05000020
+/* FPGA 7-SEGMENT ADDRESS */
+#define ADDR_OF_7SEG_GRID   0x05000030
+#define ADDR_OF_7SEG_DATA   0x05000032
+/* FPGA DOT LED ADDRESS */
+#define DOTLED_ROW          0x05000040
+#define DOTLED_COL          0x05000042
+/* FPGA PIEZO ADDRESS */
+#define ADDR_OF_BUZ         0x05000050
+/* FPGA DIP SWITCH ADDRESS */
+#define ADDR_OF_DIP_DATA    0x05000062
+
+/* FPGA KEYPAD ADDRESS */
+#define ADDR_OF_KEY_LD      0x05000072
+#define ADDR_OF_KEY_RD      0x05000070
+
+// KSJ 안되면 LD/RD 서로 체인지 해봐
+
+//#define ADDR_OF_KEY_LD      0x05000070
+//#define ADDR_OF_KEY_RD      0x05000072
+
+
+/* FPGA Full Color LED */
+#define ADDR_OF_FULL_LED1_RED	0x050000a0
+#define ADDR_OF_FULL_LED1_GREEN	0x050000a2
+#define ADDR_OF_FULL_LED1_BLUE	0x050000a4
+
+#define ADDR_OF_FULL_LED2_RED	0x050000a6
+#define ADDR_OF_FULL_LED2_GREEN	0x050000a8
+#define ADDR_OF_FULL_LED2_BLUE	0x050000aa
+
+#define ADDR_OF_FULL_LED3_RED	0x050000b0
+#define ADDR_OF_FULL_LED3_GREEN	0x050000b2
+#define ADDR_OF_FULL_LED3_BLUE	0x050000b4
+
+#define ADDR_OF_FULL_LED4_RED	0x050000b6
+#define ADDR_OF_FULL_LED4_GREEN	0x050000b8
+#define ADDR_OF_FULL_LED4_BLUE	0x050000ba
+
+
+#endif
