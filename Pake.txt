@@ -1,0 +1,46 @@
+;
+; TITLE: How to Patch and build u-boot-1.3.4
+;
+; resource at: _Q?K/dev/bdds/bootload/_Work - develop version 
+;              _R?LLKP/v.ds/exercise/uboot  - running version
+;
+
+1. cd ~/exercise/uboot/
+2. untar your u-boot-1.3.4.tar.bz2
+3. untar Pake.tar
+
+then,   
+	Pake		: Pake script
+	Pakefile	: Pakefile
+	Pake_add/	: Pake_add/ folder
+	Pake_mod/	: Pake_mod/ folder
+
+4. mv u-boot-1.3.4   u-boot-134
+
+5. ln -s ~/exercise/uboot/u-boot-134  /work/uboot
+
+6. cd  /work/uboot
+
+7. link..
+
+	ln -s ../Pake		./Pake
+	ln -s ../Pakefile 	./Pakefile
+
+;
+; Patch and build u-boot
+
+11. make clean ; make distclean 
+12. ./Pake
+13. make smds2450_config
+14. make
+
+;
+; install u-boot.bin
+
+21. cp u-boot.bin	/tftpboot/
+
+;
+; download & run from board
+
+31. tftp 33000000 u-boot.bin
+32. go   33000000

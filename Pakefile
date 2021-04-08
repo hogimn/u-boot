@@ -1,0 +1,177 @@
+##
+##	Pakefile for patching u-boot
+##		-Seo Kwang Won 2017.4.26
+## /work/uboot = ~/exercise/uboot/u-boot.1.3.4
+##
+
+
+ADD :=./Pake_add
+MOD :=./Pake_mod
+DST :=./u-boot-1.3.4
+
+ALLCOPY := S3C2450.H MOVI.H S3C_ONENAND.H SMDS2450.H ARCH-S3C24XX MTD_H MMC S3C24XX COMMON RTC NET MTD_D SMDS2450 MODIFIED
+CLEANUP := DIET 
+
+
+# ##################################################
+# ##################################################
+# ##################################################
+# ##################################################
+
+all: $(CLEANUP) $(ALLCOPY)
+	@echo usage: ./pake target
+
+# ##################################################
+#	(DST)/include
+# ##################################################
+S3C2450.H:
+	@cp -a $(ADD)/include/s3c2450.h		$(DST)/include/	
+#	@cp -a $(ADD)/include/s3c2416.h		$(DST)/include/
+	@echo $(DST)/include/$@ copied...
+MOVI.H:
+	@cp -a $(ADD)/include/movi.h		$(DST)/include/
+	@echo $(DST)/include/$@ copied...
+S3C_ONENAND.H:
+	@cp -a $(ADD)/include/s3c_onenand.h	$(DST)/include/
+	@echo $(DST)/include/$@ copied...
+
+# ##################################################
+#	(DST)/include/configs
+# ##################################################
+SMDS2450.H:
+	@cp -a $(ADD)/include/configs/smds2450.h	$(DST)/include/configs/
+	@echo $(DST)/include/configs/$@ copied...
+
+# ##################################################
+#	(DST)/include/asm-arm
+# ##################################################
+ARCH-S3C24XX:
+	@cp -a $(ADD)/include/asm-arm/arch-s3c24xx	$(DST)/include/asm-arm/
+	@echo $(DST)/include/asm-arm/$@ dir copied...
+
+# ##################################################
+#	(DST)/include/linux/mtd
+# ##################################################
+MTD_H:
+	@cp -a $(ADD)/include/linux/mtd/s3c_onenand.h	$(DST)/include/linux/mtd/
+	@echo $(DST)/include/linux/mtd/$@ dir copied...
+
+# ##################################################
+#	(DST)/include/linux/mmc
+# ##################################################
+MMC:
+	@cp -a $(ADD)/include/linux/mmc			$(DST)/include/linux
+	@echo $(DST)/include/linux/$@ dir copied...
+
+# ##################################################
+#	(DST)/cpu/s3c24xx
+# ##################################################
+S3C24XX:
+	@cp -a $(ADD)/cpu/s3c24xx			$(DST)/cpu/
+	@echo $(DST)/cpu/$@ dir copied...
+
+# ##################################################
+#	(DST)/common
+# ##################################################
+COMMON:
+	@cp -a $(ADD)/common/env_movi.c	$(DST)/common/
+	@cp -a $(ADD)/common/env_auto.c	$(DST)/common/
+	@cp -a $(ADD)/common/cmd_usbd.c	$(DST)/common/
+	@cp -a $(ADD)/common/cmd_movi.c	$(DST)/common/
+	@echo $(DST)/common/$@ copied...
+
+# ##################################################
+#	(DST)/drivers/rtc
+# ##################################################
+RTC:
+	@cp -a $(ADD)/drivers/rtc/s3c24xx_rtc.c	$(DST)/drivers/rtc/
+	@echo $(DST)/drivers/rtc/$@ copied...
+
+# ##################################################
+#	(DST)/drivers/net
+# ##################################################
+NET:
+	@cp -a $(ADD)/drivers/net/smc911xdxl.c	$(DST)/drivers/net/
+	@echo $(DST)/drivers/net/$@ copied...
+	
+# ##################################################
+#	(DST)/drivers/mtd
+# ##################################################
+MTD_D:
+	@cp -a $(ADD)/drivers/mtd/onenand/s3c_onenand.c	$(DST)/drivers/mtd/onenand/
+	@echo $(DST)/drivers/mtd/onenand/$@ copied...
+
+# ##################################################
+#	(DST)/board/samsung/smds2450
+# ##################################################
+SMDS2450:
+	@mkdir -p                           $(DST)/board/samsung
+	@cp -a $(ADD)/board/samsung/smds2450		$(DST)/board/samsung/
+#	@mkdir -p                           $(DST)/board/mds
+#	@cp -a $(ADD)/board/mds/mds2450		$(DST)/board/mds
+# config.mk  flash.c  lowlevel_init.S  Makefile  mds2450.c  u-boot.lds
+	@echo $(DST)/board/samsung/$@ dir copied...
+
+# ##################################################
+#	MODIFIED FILES
+# ##################################################
+MODIFIED:
+	@cp -a $(MOD)/Makefile			$(DST)/
+	@cp -a $(MOD)/mkconfig			$(DST)/
+	@cp -a $(MOD)/lib_arm/bootm.c		$(DST)/lib_arm/
+	@cp -a $(MOD)/lib_arm/board.c		$(DST)/lib_arm/
+	@cp -a $(MOD)/include/linux/mtd		$(DST)/include/linux/
+	@cp -a $(MOD)/include/asm-arm/mach-types.h	$(DST)/include/asm-arm/
+	@cp -a $(MOD)/include/nand.h		$(DST)/include/
+	@cp -a $(MOD)/drivers/mtd/nand		$(DST)/drivers/mtd/	
+	@cp -a $(MOD)/drivers/rtc/Makefile		$(DST)/drivers/rtc/
+	@cp -a $(MOD)/drivers/net/Makefile		$(DST)/drivers/net/
+	@cp -a $(MOD)/common/Makefile		$(DST)/common/	
+	@cp -a $(MOD)/common/main.c		$(DST)/common/	
+	@cp -a $(MOD)/common/env_nand.c		$(DST)/common/
+	@cp -a $(MOD)/common/env_common.c		$(DST)/common/
+	@cp -a $(MOD)/common/cmd_onenand.c		$(DST)/common/
+	@cp -a $(MOD)/common/cmd_nvedit.c		$(DST)/common/
+	@cp -a $(MOD)/common/cmd_nand.c		$(DST)/common/
+	@cp -a $(MOD)/common/cmd_bootm.c		$(DST)/common/
+	@cp -a $(MOD)/common/cmd_boot.c		$(DST)/common/
+
+
+# ##################################################
+#	CLEAN FILES
+# ##################################################
+DIET:
+	@cd $(DST) ;\
+	rm -rf doc ;\
+	rm -rf lib_avr32 lib_blackfin lib_i386 lib_m68k lib_microblaze lib_mips lib_nios lib_nios2 lib_ppc lib_sh lib_sparc ;\
+	rm -rf nand_spl onenand_ipl ;\
+	rm -rf avr32_config.mk blackfin_config.mk i386_config.mk m68k_config.mk microblaze_config.mk mips_config.mk nios_config.mk nios2_config.mk ppc_config.mk sh_config.mk sparc_config.mk ;\
+	rm -rf CHANGELOG*  MAINTAINERS README COPYING CREDITS MAKEALL ;\
+	rm -rf .gitignore
+
+	@cd $(DST)/board ;\
+	rm -rf *
+#	rm -rf a3000         csb272         icu862         MigoR        pm828        siemens actux1        csb472         idmr           ml2          pm854        sixnet actux2        csb637         ids8247        modnet50     pm856        sl8245 actux3        cu824          impa7          motionpro    pn62         actux4        dave           imx31_litekit  mousse       ppmc7xx      adder         davinci        imx31_phycore  mp2usb       ppmc8260     snmc ads5121       dbau1x00       incaip         mpc8540eval  prodrive     socrates alaska        delta          inka4x0        mpl          psyent       sorcery altera        dnp1110        innokom        mpr2         purple       spc1920 amcc          eltec          integratorap   ms7720se     pxa255_idp   spd8xx amirix        emk            integratorcp   ms7722se     qemu-mips    ssv apollon       ep7312         ip860          ms7750se     quad100hd    stxgp3 armadillo     ep8248         iphase4539     munices      quantum      stxssa assabet       ep8260         ispan          musenki      r2dplus      stxxtc atc           ep82xxm        ivm            mvblm7       r360mpi      svm_sc8xx AtmarkTechno  ep88x          ixdp425        mvblue       r7780mp      sx1 atmel         eric           jse            mvs1         rattler      tb0229 atum8548      esd            jupiter        mx1ads       rbc823       total5200 barco         esteem192e     kb9202         mx1fs2       rmu          tqc bc3450        etin           korat          mx31ads      RPXClassic   trab bf533-ezkit   etx094         kup            nc650        RPXlite      trizepsiv bf533-stamp   evb4510        lantec         netphone     RPXlite_dw   uc100 bf537-stamp   evb64260       lart           netstal      rpxsuper     uc101 bf561-ezkit   eXalion        LEOX           netstar      RRvision     utx8245 bmw           exbitgen       linkstation    netta        rsdproto     v37 BuS           fads           logodl         netta2       sacsng       v38b c2mon         flagadm        lpc2292sodimm  netvia       sandburst    versatile canmb         freescale      lpd7a40x       ns9750dev    sandpoint    voiceblue cerf250       funkwerk       lubbock        nx823        sbc2410x     w7o cm4008        g2000          lwmon          o2dnt        sbc405       wepep250 cm41xx        gaisler        lwmon5         omap1510inn  sbc8240      westel cm5200        gcplus         m501sk         omap1610inn  sbc8260      xaeniax cmc_pu2       gen860t        m5271evb       omap2420h4   sbc8349      xilinx cmi           genietv        m5272c3        omap5912osk  sbc8548      xm250 cobra5272     gth            m5282evb       omap730p2    sbc8560      xpedite1k cogent        gth2           MAI            oxc          sbc8641d     xsengine cpc45         gw8260         Marvell        pb1x00       sc3          zeus cpu86         hermes         matrix_vision  pcippc2      sc520_cdp    zpc1900 cpu87         hidden_dragon  mbx8xx         pcs440ep     sc520_spunk  zylonite cradle        hmi1001        mcc200         pleb2        scb9328 cray          hymod          mgcoge         pm520        sh7763rdp csb226        icecube        mgsuvd         pm826        shannon 
+
+	@cd $(DST)/common ;\
+	rm -rf cmd_ambapp.c cmd_bedbug.c cmd_bmp.c cmd_bootldr.c cmd_cplbinfo.c cmd_dcr.c cmd_df.c cmd_diag.c cmd_display.c cmd_doc.c cmd_dtt.c cmd_fdos.c cmd_fdt.c cmd_fpga.c cmd_i2c.c cmd_ide.c cmd_immap.c cmd_log.c cmd_mfsl.c cmd_mii.c cmd_mp.c cmd_otp.c cmd_pci.c cmd_portio.c cmd_reiser.c cmd_sata.c cmd_scsi.c cmd_setexpr.c cmd_sf.c cmd_spi.c cmd_strings.c cmd_terminal.c cmd_universe.c cmd_usb.c  ;\
+	rm -rf fdt_support.c
+
+	@cd $(DST)/cpu ;\
+	rm -rf *
+#	rm -rf 74xx_7xx  arm926ejs  i386     mcf5227x  mcf547x_8x  mpc5xxx  mpc85xx  ppc4xx   sh4 arm1136   arm946es   ixp      mcf523x   microblaze  mpc8220  mpc86xx  pxa arm720t   arm_intcm  leon2    mcf52x2   mips        mpc824x  mpc8xx   s3c44b0 arm920t   at32ap     leon3    mcf532x   mpc512x     mpc8260  nios     sa1100 arm925t   blackfin   lh7a40x  mcf5445x  mpc5xx      mpc83xx  nios2    sh3 
+
+	@cd $(DST)/drivers/net
+#	rm -rf     /* add some unused driver source files here */
+
+	@cd $(DST)/include ;\
+	rm -rf ./asm-mips ./asm-nios ./asm-avr32 ./asm-avr32/arch-at32ap700x ./galileo ./asm-ppc ./asm-arm/arch-omap ./asm-arm/arch-s3c44b0 ./asm-arm/arch-ks8695 ./asm-arm/arch-lpc2292 ./asm-arm/arch-pxa ./asm-arm/arch-at91sam9 ./asm-arm/arch-sa1100 ./asm-arm/arch-at91rm9200 ./asm-arm/arch-ixp ./asm-arm/arch-imx ./asm-arm/arch-omap24xx ./asm-arm/arch-mx31 ./asm-arm/arch-davinci ./asm-arm/arch-arm720t ./asm-arm/arch-arm925t ./asm-sh ./asm-microblaze ./asm-blackfin ./asm-blackfin/mach-bf527 ./asm-blackfin/mach-bf533 ./asm-blackfin/mach-common ./asm-blackfin/mach-common/bits ./asm-blackfin/mach-bf537 ./asm-blackfin/mach-bf548 ./asm-blackfin/mach-bf561 ./asm-m68k ./asm-m68k/coldfire ./asm-nios2 ./asm-sparc ./asm-sparc/arch-leon2 ./asm-sparc/arch-leon3 ./asm-i386 ./asm-i386/ic
+
+	@cd $(DST) ;\
+	rm -rf api
+	rm -rf post
+
+	@cd $(DST) ;\
+	rm -rf api_examples  examples
+	
+# .EOF.
